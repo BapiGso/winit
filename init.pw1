@@ -1,0 +1,15 @@
+$LocalTempDir = $env:TEMP; $ChromeInstaller = "ChromeInstaller.exe"; (new-object    System.Net.WebClient).DownloadFile('http://dl.google.com/chrome/install/375.126/chrome_installer.exe', "$LocalTempDir\$ChromeInstaller"); & "$LocalTempDir\$ChromeInstaller" /silent /install; $Process2Monitor =  "ChromeInstaller"; Do { $ProcessesFound = Get-Process | ?{$Process2Monitor -contains $_.Name} | Select-Object -ExpandProperty Name; If ($ProcessesFound) { "Still running: $($ProcessesFound -join ', ')" | Write-Host; Start-Sleep -Seconds 2 } else { rm "$LocalTempDir\$ChromeInstaller" -ErrorAction SilentlyContinue -Verbose } } Until (!$ProcessesFound)
+# 设置 PowerShell 执行策略
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+# 下载安装脚本
+iex (new-object net.webclient).downloadstring('https://get.scoop.sh')
+
+scoop bucket add extras
+scoop bucket add main
+scoop bucket add dorado https://github.com/chawyehsu/dorado
+
+
+# 使用Scoop安装VLC、7-Zip和Git
+scoop install vlc
+scoop install 7zip
+scoop install git
