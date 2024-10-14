@@ -1,0 +1,8 @@
+Windows Registry Editor Version 5.00
+
+[HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\CurrentVersion\NetworkList\DefaultMediaCost]
+"3G"=dword:00000002
+"4G"=dword:00000002
+"Default"=dword:00000002
+"Ethernet"=dword:00000002
+"WiFi"=dword:00000002
