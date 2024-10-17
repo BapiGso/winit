@@ -20,25 +20,26 @@ scoop bucket add dorado https://github.com/chawyehsu/dorado
 
 
 # 使用Scoop安装
-scoop install vlc
-scoop install foobar2000
-scoop install ffmpeg
-scoop install obs-studio
-scoop install qbittorrent-enhanced
-scoop install sqlitebrowser
-scoop install putty
-scoop install hxd
-scoop install blender
-scoop install goland
-scoop install reaper
-scoop install pycharm
-scoop install sumatrapdf
-scoop install v2rayn
-scoop install rustdesk
-scoop install imageglass
-scoop install go
-scoop install ollama
-scoop install msys
+scoop install blender          # 开源3D建模和动画软件
+scoop install ffmpeg           # 强大的多媒体处理工具，支持音视频转换和流处理
+scoop install foobar2000       # 高度可定制的音频播放器
+scoop install goland           # JetBrains开发的Go语言集成开发环境（IDE）
+scoop install go               # Go语言编程语言的工具链
+scoop install hxd              # 十六进制编辑器，用于查看和编辑二进制文件
+scoop install imageglass       # 轻量级图像查看器，支持多种图像格式
+scoop install msys             # 提供Unix风格的命令行环境和工具
+scoop install musescore        # 开源乐谱制作软件
+scoop install obs-studio       # 开源视频录制和直播软件
+scoop install ollama           # 用于构建和运行机器学习模型的工具
+scoop install pycharm          # JetBrains开发的Python集成开发环境（IDE）
+scoop install putty            # SSH和Telnet客户端，用于远程访问
+scoop install qbittorrent-enhanced # 开源BitTorrent客户端，增强版
+scoop install reaper           # 数字音频工作站（DAW），用于录音、编辑和混音
+scoop install rustdesk         # 远程桌面软件，支持跨平台访问
+scoop install sqlitebrowser     # SQLite数据库的可视化管理工具
+scoop install sumatrapdf       # 轻量级PDF阅读器
+scoop install v2rayn           # V2Ray的Windows客户端，用于科学上网
+scoop install vlc              # 开源多媒体播放器，支持几乎所有音视频格式
 
 
 #reg add "HKLM\SOFTWARE\Microsoft\Windows Photo Viewer\Capabilities\FileAssociations" /v ".jpg" /t REG_SZ /d PhotoViewer.FileAssoc.Tiff /f
