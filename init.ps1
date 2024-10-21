@@ -23,6 +23,7 @@ scoop bucket add dorado https://github.com/chawyehsu/dorado
 scoop install blender          # 开源3D建模和动画软件
 scoop install ffmpeg           # 强大的多媒体处理工具，支持音视频转换和流处理
 scoop install foobar2000       # 高度可定制的音频播放器
+scoop install frp              #
 scoop install goland           # JetBrains开发的Go语言集成开发环境（IDE）
 scoop install go               # Go语言编程语言的工具链
 scoop install hxd              # 十六进制编辑器，用于查看和编辑二进制文件
