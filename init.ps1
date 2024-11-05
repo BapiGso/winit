@@ -7,23 +7,24 @@ Start-Job -ScriptBlock {
     Start-Process -FilePath "$env:TEMP\SteamSetup.exe" -ArgumentList '/S' -Wait
 }
 
-# https://blog.bling.moe/post/11/
-# 设置 PowerShell 执行策略
-[Environment]::SetEnvironmentVariable('SCOOP', 'D:\ScoopApps', 'User');
-[Environment]::SetEnvironmentVariable('SCOOP_GLOBAL', 'D:\GlobalScoopApps', 'Machine');
+Start-Job -ScriptBlock {
+    # https://blog.bling.moe/post/11/
+    # 设置 PowerShell 执行策略
+    [Environment]::SetEnvironmentVariable('SCOOP', 'D:\ScoopApps', 'User');
+    [Environment]::SetEnvironmentVariable('SCOOP_GLOBAL', 'D:\GlobalScoopApps', 'Machine');
 
-Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
-iex (new-object net.webclient).downloadstring('https://get.scoop.sh')
-scoop install git
-scoop bucket add extras
-scoop bucket add dorado https://github.com/chawyehsu/dorado
-
+    Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+    iex (new-object net.webclient).downloadstring('https://get.scoop.sh')
+    scoop install git
+    scoop bucket add extras
+    scoop bucket add dorado https://github.com/chawyehsu/dorado
+}
 
 # 使用Scoop安装
 scoop install blender          # 开源3D建模和动画软件
 scoop install ffmpeg           # 强大的多媒体处理工具，支持音视频转换和流处理
 scoop install foobar2000       # 高度可定制的音频播放器
-scoop install frp              #
+scoop install frp              # 开源的跨平台端口转发工具
 scoop install goland           # JetBrains开发的Go语言集成开发环境（IDE）
 scoop install go               # Go语言编程语言的工具链
 scoop install hxd              # 十六进制编辑器，用于查看和编辑二进制文件
@@ -31,6 +32,7 @@ scoop install imageglass       # 轻量级图像查看器，支持多种图像�
 scoop install msys             # 提供Unix风格的命令行环境和工具
 scoop install musescore        # 开源乐谱制作软件
 scoop install obs-studio       # 开源视频录制和直播软件
+scoop install office-tool-plus # Office工具集
 scoop install ollama           # 用于构建和运行机器学习模型的工具
 scoop install pycharm          # JetBrains开发的Python集成开发环境（IDE）
 scoop install putty            # SSH和Telnet客户端，用于远程访问
