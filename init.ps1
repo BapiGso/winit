@@ -29,6 +29,7 @@ scoop install goland           # JetBrains开发的Go语言集成开发环境（
 scoop install go               # Go语言编程语言的工具链
 scoop install hxd              # 十六进制编辑器，用于查看和编辑二进制文件
 scoop install imageglass       # 轻量级图像查看器，支持多种图像格式
+scoop install monero           # 开源的加密货币软件
 scoop install msys             # 提供Unix风格的命令行环境和工具
 scoop install musescore        # 开源乐谱制作软件
 scoop install obs-studio       # 开源视频录制和直播软件
