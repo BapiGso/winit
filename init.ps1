@@ -40,6 +40,7 @@ scoop install putty            # SSH和Telnet客户端，用于远程访问
 scoop install qbittorrent-enhanced # 开源BitTorrent客户端，增强版
 scoop install reaper           # 数字音频工作站（DAW），用于录音、编辑和混音
 scoop install rustdesk         # 远程桌面软件，支持跨平台访问
+scoop install scrcpy            # Android屏幕录制和远程控制工具
 scoop install sqlitebrowser     # SQLite数据库的可视化管理工具
 scoop install sumatrapdf       # 轻量级PDF阅读器
 scoop install v2rayn           # V2Ray的Windows客户端，用于科学上网
