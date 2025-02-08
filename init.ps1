@@ -47,6 +47,7 @@ scoop install sqlitebrowser     # SQLite数据库的可视化管理工具
 scoop install sumatrapdf       # 轻量级PDF阅读器
 scoop install v2rayn           # V2Ray的Windows客户端，用于科学上网
 scoop install vlc              # 开源多媒体播放器，支持几乎所有音视频格式
+scoop install windowsdesktop-runtime-lts # Windows桌面运行时，提供Windows桌面应用的运行环境（LTS版）
 
 
 #reg add "HKLM\SOFTWARE\Microsoft\Windows Photo Viewer\Capabilities\FileAssociations" /v ".jpg" /t REG_SZ /d PhotoViewer.FileAssoc.Tiff /f
