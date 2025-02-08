@@ -27,6 +27,7 @@ scoop install foobar2000       # 高度可定制的音频播放器
 scoop install frp              # 开源的跨平台端口转发工具
 scoop install goland           # JetBrains开发的Go语言集成开发环境（IDE）
 scoop install go               # Go语言编程语言的工具链
+scoop install go-size-analyzer # Go语言大小分析工具
 scoop install hxd              # 十六进制编辑器，用于查看和编辑二进制文件
 scoop install imageglass       # 轻量级图像查看器，支持多种图像格式
 scoop install monero           # 开源的加密货币软件
