@@ -37,6 +37,7 @@ scoop install musescore        # 开源乐谱制作软件
 scoop install obs-studio       # 开源视频录制和直播软件
 scoop install office-tool-plus # Office工具集
 scoop install ollama           # 用于构建和运行机器学习模型的工具
+scoop install openssh          # SSH客户端
 scoop install pycharm          # JetBrains开发的Python集成开发环境（IDE）
 scoop install putty            # SSH和Telnet客户端，用于远程访问
 scoop install qbittorrent-enhanced # 开源BitTorrent客户端，增强版
