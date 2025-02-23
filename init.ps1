@@ -22,6 +22,7 @@ Start-Job -ScriptBlock {
 
 # 使用Scoop安装
 scoop install blender          # 开源3D建模和动画软件
+scoop install ddu              # 用于显卡驱动卸载
 scoop install fancontrol       # 风扇控制工具
 scoop install ffmpeg           # 强大的多媒体处理工具，支持音视频转换和流处理
 scoop install foobar2000       # 高度可定制的音频播放器
