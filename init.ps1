@@ -69,3 +69,8 @@ Start-Job -ScriptBlock {
 Start-Job -ScriptBlock {
     wsl.exe --install -d Debian
 }
+
+Start-Job -ScriptBlock {
+    powercfg /L
+    powercfg -restoredefaultschemes
+}
