@@ -15,7 +15,7 @@ Start-Job -ScriptBlock {
 
     Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
     iex (new-object net.webclient).downloadstring('https://get.scoop.sh')
-    scoop install git sudo
+    scoop install git
     scoop bucket add extras
     scoop bucket add dorado https://github.com/chawyehsu/dorado
 }
@@ -24,6 +24,7 @@ Start-Job -ScriptBlock {
 scoop install blender          # 开源3D建模和动画软件
 scoop install cuda             # A parallel computing platform and programming model invented by NVIDIA
 scoop install ddu              # 用于显卡驱动卸载
+scoop install dotnet-sdk-lts
 scoop install ffmpeg           # 强大的多媒体处理工具，支持音视频转换和流处理
 scoop install foobar2000       # 高度可定制的音频播放器
 scoop install frp              # 开源的跨平台端口转发工具
@@ -32,6 +33,7 @@ scoop install go               # Go语言编程语言的工具链
 scoop install go-size-analyzer # Go语言大小分析工具
 scoop install hxd              # 十六进制编辑器，用于查看和编辑二进制文件
 scoop install imageglass       # 轻量级图像查看器，支持多种图像格式
+scoop install jamovi
 scoop install monero           # 开源的加密货币软件
 scoop install msys             # 提供Unix风格的命令行环境和工具
 scoop install musescore        # 开源乐谱制作软件
@@ -50,7 +52,6 @@ scoop install sumatrapdf       # 轻量级PDF阅读器
 scoop install telegram         # 开源即时通讯软件
 scoop install v2rayn           # V2Ray的Windows客户端，用于科学上网
 scoop install vlc              # 开源多媒体播放器，支持几乎所有音视频格式
-sudo scoop install windowsdesktop-runtime-lts # Windows桌面运行时，提供Windows桌面应用的运行环境（LTS版）
 
 
 #reg add "HKLM\SOFTWARE\Microsoft\Windows Photo Viewer\Capabilities\FileAssociations" /v ".jpg" /t REG_SZ /d PhotoViewer.FileAssoc.Tiff /f
