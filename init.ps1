@@ -1,4 +1,14 @@
-$LocalTempDir = $env:TEMP; $ChromeInstaller = "ChromeInstaller.exe"; (new-object System.Net.WebClient).DownloadFile('http://dl.google.com/chrome/install/375.126/chrome_installer.exe', "$LocalTempDir\$ChromeInstaller"); & "$LocalTempDir\$ChromeInstaller" /silent /install; $Process2Monitor =  "ChromeInstaller"; Do { $ProcessesFound = Get-Process | ?{$Process2Monitor -contains $_.Name} | Select-Object -ExpandProperty Name; If ($ProcessesFound) { "Still running: $($ProcessesFound -join ', ')" | Write-Host; Start-Sleep -Seconds 2 } else { rm "$LocalTempDir\$ChromeInstaller" -ErrorAction SilentlyContinue -Verbose } } Until (!$ProcessesFound)
+$LocalTempDir = $env:TEMP; $ChromeInstaller = "ChromeInstaller.exe";(new-object System.Net.WebClient).DownloadFile('http://dl.google.com/chrome/install/375.126/chrome_installer.exe', "$LocalTempDir\$ChromeInstaller"); & "$LocalTempDir\$ChromeInstaller" /silent /install; $Process2Monitor = "ChromeInstaller"; Do
+{
+    $ProcessesFound = Get-Process | ?{ $Process2Monitor -contains $_.Name } | Select-Object -ExpandProperty Name; If ($ProcessesFound)
+    {
+        "Still running: $( $ProcessesFound -join ', ' )" | Write-Host; Start-Sleep -Seconds 2
+    }
+    else
+    {
+        rm "$LocalTempDir\$ChromeInstaller" -ErrorAction SilentlyContinue -Verbose
+    }
+} Until (!$ProcessesFound)
 
 # Install Steam silently
 Start-Job -ScriptBlock {
@@ -17,23 +27,20 @@ Start-Job -ScriptBlock {
     iex (new-object net.webclient).downloadstring('https://get.scoop.sh')
     scoop install git
     scoop bucket add extras
-    scoop bucket add dorado https://github.com/chawyehsu/dorado
 }
 
 # 使用Scoop安装
 scoop install blender          # 开源3D建模和动画软件
-scoop install cuda             # A parallel computing platform and programming model invented by NVIDIA
-scoop install ddu              # 用于显卡驱动卸载
-scoop install dotnet-sdk-lts
+scoop install cuda             # NVIDIA的并行计算平台和编程模型
+scoop install ddu              # Display Driver Uninstaller，用于彻底卸载显卡驱动
+scoop install dotnet-sdk-lts   # .NET SDK的长期支持版本
 scoop install ffmpeg           # 强大的多媒体处理工具，支持音视频转换和流处理
 scoop install foobar2000       # 高度可定制的音频播放器
 scoop install frp              # 开源的跨平台端口转发工具
-scoop install goland           # JetBrains开发的Go语言集成开发环境（IDE）
-scoop install go               # Go语言编程语言的工具链
-scoop install go-size-analyzer # Go语言大小分析工具
+scoop install go goland  go-size-analyzer        # Go编程语言及其开发环境
 scoop install hxd              # 十六进制编辑器，用于查看和编辑二进制文件
 scoop install imageglass       # 轻量级图像查看器，支持多种图像格式
-scoop install jamovi
+scoop install jamovi           # 开源统计软件，提供用户友好的界面
 scoop install monero           # 开源的加密货币软件
 scoop install msys             # 提供Unix风格的命令行环境和工具
 scoop install musescore        # 开源乐谱制作软件
@@ -50,7 +57,7 @@ scoop install scrcpy            # Android屏幕录制和远程控制工具
 scoop install sqlitebrowser     # SQLite数据库的可视化管理工具
 scoop install sumatrapdf       # 轻量级PDF阅读器
 scoop install telegram         # 开源即时通讯软件
-scoop install v2rayn           # V2Ray的Windows客户端，用于科学上网
+scoop install v2rayn           # V2Ray的Windows客户端
 scoop install vlc              # 开源多媒体播放器，支持几乎所有音视频格式
 
 
@@ -58,7 +65,6 @@ scoop install vlc              # 开源多媒体播放器，支持几乎所有�
 #reg add "HKLM\SOFTWARE\Microsoft\Windows Photo Viewer\Capabilities\FileAssociations" /v ".jpeg" /t REG_SZ /d PhotoViewer.FileAssoc.Tiff /f
 #reg add "HKLM\SOFTWARE\Microsoft\Windows Photo Viewer\Capabilities\FileAssociations" /v ".bmp" /t REG_SZ /d PhotoViewer.FileAssoc.Tiff /f
 #reg add "HKLM\SOFTWARE\Microsoft\Windows Photo Viewer\Capabilities\FileAssociations" /v ".png" /t REG_SZ /d PhotoViewer.FileAssoc.Tiff /f
-
 
 Start-Job -ScriptBlock {
     Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize" -Name "ColorPrevalence" -Value 1
@@ -71,6 +77,7 @@ Start-Job -ScriptBlock {
     #只适用于Ryzen 电源管理
     REG ADD "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power\PowerSettings\54533251-82be-4824-96c1-47b60b740d00\75b0ae3f-bce0-45a7-8c89-c9611c25e100" /v Attributes /t REG_DWORD /d 2 /f
 }
+
 
 Start-Job -ScriptBlock {
     wsl.exe --install -d Debian
