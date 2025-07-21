@@ -37,22 +37,18 @@ scoop install dotnet-sdk-lts   # .NET SDK的长期支持版本
 scoop install ffmpeg           # 强大的多媒体处理工具，支持音视频转换和流处理
 scoop install foobar2000       # 高度可定制的音频播放器
 scoop install frp              # 开源的跨平台端口转发工具
-scoop install go goland  go-size-analyzer        # Go编程语言及其开发环境
 scoop install hxd              # 十六进制编辑器，用于查看和编辑二进制文件
 scoop install imageglass       # 轻量级图像查看器，支持多种图像格式
 scoop install jamovi           # 开源统计软件，提供用户友好的界面
 scoop install monero           # 开源的加密货币软件
-scoop install msys             # 提供Unix风格的命令行环境和工具
 scoop install musescore        # 开源乐谱制作软件
+scoop install msys go goland go-size-analyzer pycharm     #集成开发环境
 scoop install nomeiryoui       # 替换系统字体
 scoop install obs-studio       # 开源视频录制和直播软件
 scoop install office-tool-plus # Office工具集
 scoop install ollama           # 用于构建和运行机器学习模型的工具
 scoop install openssh          # SSH客户端
-scoop install pycharm          # JetBrains开发的Python集成开发环境（IDE）
-scoop install putty            # SSH和Telnet客户端，用于远程访问
 scoop install qbittorrent-enhanced # 开源BitTorrent客户端，增强版
-scoop install quicklook         # 预览文件的工具
 scoop install reaper           # 数字音频工作站（DAW），用于录音、编辑和混音
 scoop install rustdesk         # 远程桌面软件，支持跨平台访问
 scoop install scrcpy            # Android屏幕录制和远程控制工具
@@ -70,6 +66,7 @@ Start-Job -ScriptBlock {
     sudo Invoke-WebRequest -Uri "https://raw.githubusercontent.com/ZWolken/PingFang/main/PingFangSC-Light.otf" -OutFile "$env:windir\Fonts\PingFangSC-Thin.otf"
     sudo Invoke-WebRequest -Uri "https://raw.githubusercontent.com/ZWolken/PingFang/main/PingFangSC-Light.otf" -OutFile "$env:windir\Fonts\PingFangSC-Ultralight.otf"
 }
+
 
 
 #reg add "HKLM\SOFTWARE\Microsoft\Windows Photo Viewer\Capabilities\FileAssociations" /v ".jpg" /t REG_SZ /d PhotoViewer.FileAssoc.Tiff /f
