@@ -57,6 +57,7 @@ scoop install sumatrapdf       # 轻量级PDF阅读器
 scoop install telegram         # 开源即时通讯软件
 scoop install v2rayn           # V2Ray的Windows客户端
 scoop install vlc              # 开源多媒体播放器，支持几乎所有音视频格式
+scoop install zed
 
 Start-Job -ScriptBlock {
     sudo Invoke-WebRequest -Uri "https://raw.githubusercontent.com/ZWolken/PingFang/main/PingFangSC-Light.otf" -OutFile "$env:windir\Fonts\PingFangSC-Light.otf"
