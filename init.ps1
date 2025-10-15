@@ -42,7 +42,7 @@ scoop install imageglass       # 轻量级图像查看器，支持多种图像�
 scoop install jamovi           # 开源统计软件，提供用户友好的界面
 scoop install monero           # 开源的加密货币软件
 scoop install musescore        # 开源乐谱制作软件
-scoop install msys go goland go-size-analyzer pycharm     #集成开发环境
+scoop install msys go goland go-size-analyzer pycharm   goland-eap  #集成开发环境
 scoop install nomeiryoui       # 替换系统字体
 scoop install obs-studio       # 开源视频录制和直播软件
 scoop install office-tool-plus # Office工具集
