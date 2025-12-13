@@ -33,7 +33,6 @@ Start-Job -ScriptBlock {
 scoop install blender          # 开源3D建模和动画软件
 scoop install cuda             # NVIDIA的并行计算平台和编程模型
 scoop install ddu              # Display Driver Uninstaller，用于彻底卸载显卡驱动
-scoop install dotnet-sdk-lts   # .NET SDK的长期支持版本
 scoop install ffmpeg           # 强大的多媒体处理工具，支持音视频转换和流处理
 scoop install foobar2000       # 高度可定制的音频播放器
 scoop install frp              # 开源的跨平台端口转发工具
@@ -43,7 +42,6 @@ scoop install jamovi           # 开源统计软件，提供用户友好的界�
 scoop install monero           # 开源的加密货币软件
 scoop install musescore        # 开源乐谱制作软件
 scoop install msys go goland go-size-analyzer pycharm   goland-eap  #集成开发环境
-scoop install nomeiryoui       # 替换系统字体
 scoop install obs-studio       # 开源视频录制和直播软件
 scoop install office-tool-plus # Office工具集
 scoop install ollama           # 用于构建和运行机器学习模型的工具
@@ -55,18 +53,18 @@ scoop install scrcpy            # Android屏幕录制和远程控制工具
 scoop install sqlitebrowser     # SQLite数据库的可视化管理工具
 scoop install sumatrapdf       # 轻量级PDF阅读器
 scoop install telegram         # 开源即时通讯软件
-scoop install v2rayn           # V2Ray的Windows客户端
+scoop install v2rayn-desktop           # V2Ray的Windows客户端
 scoop install vlc              # 开源多媒体播放器，支持几乎所有音视频格式
 scoop install zed
 
-Start-Job -ScriptBlock {
-    sudo Invoke-WebRequest -Uri "https://raw.githubusercontent.com/ZWolken/PingFang/main/PingFangSC-Light.otf" -OutFile "$env:windir\Fonts\PingFangSC-Light.otf"
-    sudo Invoke-WebRequest -Uri "https://raw.githubusercontent.com/ZWolken/PingFang/main/PingFangSC-Light.otf" -OutFile "$env:windir\Fonts\PingFangSC-Medium.otf"
-    sudo Invoke-WebRequest -Uri "https://raw.githubusercontent.com/ZWolken/PingFang/main/PingFangSC-Light.otf" -OutFile "$env:windir\Fonts\PingFangSC-Regular.otf"
-    sudo Invoke-WebRequest -Uri "https://raw.githubusercontent.com/ZWolken/PingFang/main/PingFangSC-Light.otf" -OutFile "$env:windir\Fonts\PingFangSC-Semibold.otf"
-    sudo Invoke-WebRequest -Uri "https://raw.githubusercontent.com/ZWolken/PingFang/main/PingFangSC-Light.otf" -OutFile "$env:windir\Fonts\PingFangSC-Thin.otf"
-    sudo Invoke-WebRequest -Uri "https://raw.githubusercontent.com/ZWolken/PingFang/main/PingFangSC-Light.otf" -OutFile "$env:windir\Fonts\PingFangSC-Ultralight.otf"
-}
+#Start-Job -ScriptBlock {
+#    sudo Invoke-WebRequest -Uri "https://raw.githubusercontent.com/ZWolken/PingFang/main/PingFangSC-Light.otf" -OutFile "$env:windir\Fonts\PingFangSC-Light.otf"
+#    sudo Invoke-WebRequest -Uri "https://raw.githubusercontent.com/ZWolken/PingFang/main/PingFangSC-Light.otf" -OutFile "$env:windir\Fonts\PingFangSC-Medium.otf"
+#    sudo Invoke-WebRequest -Uri "https://raw.githubusercontent.com/ZWolken/PingFang/main/PingFangSC-Light.otf" -OutFile "$env:windir\Fonts\PingFangSC-Regular.otf"
+#    sudo Invoke-WebRequest -Uri "https://raw.githubusercontent.com/ZWolken/PingFang/main/PingFangSC-Light.otf" -OutFile "$env:windir\Fonts\PingFangSC-Semibold.otf"
+#    sudo Invoke-WebRequest -Uri "https://raw.githubusercontent.com/ZWolken/PingFang/main/PingFangSC-Light.otf" -OutFile "$env:windir\Fonts\PingFangSC-Thin.otf"
+#    sudo Invoke-WebRequest -Uri "https://raw.githubusercontent.com/ZWolken/PingFang/main/PingFangSC-Light.otf" -OutFile "$env:windir\Fonts\PingFangSC-Ultralight.otf"
+#}
 
 
 
