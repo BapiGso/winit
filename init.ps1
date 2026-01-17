@@ -27,12 +27,14 @@ Start-Job -ScriptBlock {
     iex (new-object net.webclient).downloadstring('https://get.scoop.sh')
     scoop install git
     scoop bucket add extras
+    scoop bucket add nonportable
 }
 
 # 使用Scoop安装
 scoop install blender          # 开源3D建模和动画软件
 scoop install cuda             # NVIDIA的并行计算平台和编程模型
 scoop install ddu              # Display Driver Uninstaller，用于彻底卸载显卡驱动
+scoop install nvidia-display-driver-dch-np
 scoop install ffmpeg           # 强大的多媒体处理工具，支持音视频转换和流处理
 scoop install foobar2000       # 高度可定制的音频播放器
 scoop install frp              # 开源的跨平台端口转发工具
