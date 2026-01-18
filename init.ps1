@@ -31,6 +31,7 @@ Start-Job -ScriptBlock {
 }
 
 # 使用Scoop安装
+scoop install alpinewsl
 scoop install blender          # 开源3D建模和动画软件
 scoop install cuda             # NVIDIA的并行计算平台和编程模型
 scoop install ddu              # Display Driver Uninstaller，用于彻底卸载显卡驱动
