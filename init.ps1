@@ -28,6 +28,7 @@ Start-Job -ScriptBlock {
     scoop install git
     scoop bucket add extras
     scoop bucket add nonportable
+    Install-Module PSReadLine -MinimumVersion 2.0.3 -Scope CurrentUser -Force
 }
 
 # 使用Scoop安装
