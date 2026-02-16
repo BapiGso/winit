@@ -33,6 +33,7 @@ Start-Job -ScriptBlock {
 # 使用Scoop安装
 scoop install alpinewsl
 scoop install blender          # 开源3D建模和动画软件
+scoop install claude-code      #
 scoop install cuda             # NVIDIA的并行计算平台和编程模型
 scoop install ddu              # Display Driver Uninstaller，用于彻底卸载显卡驱动
 scoop install nvidia-display-driver-dch-np
@@ -44,7 +45,7 @@ scoop install imageglass       # 轻量级图像查看器，支持多种图像�
 scoop install jamovi           # 开源统计软件，提供用户友好的界面
 scoop install monero           # 开源的加密货币软件
 scoop install musescore        # 开源乐谱制作软件
-scoop install msys go goland go-size-analyzer pycharm   goland-eap  #集成开发环境
+scoop install msys go goland go-size-analyzer pycharm goland-eap  #集成开发环境
 scoop install obs-studio       # 开源视频录制和直播软件
 scoop install office-tool-plus # Office工具集
 scoop install ollama           # 用于构建和运行机器学习模型的工具
