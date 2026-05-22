@@ -1,101 +1,167 @@
-$LocalTempDir = $env:TEMP; $ChromeInstaller = "ChromeInstaller.exe";(new-object System.Net.WebClient).DownloadFile('http://dl.google.com/chrome/install/375.126/chrome_installer.exe', "$LocalTempDir\$ChromeInstaller"); & "$LocalTempDir\$ChromeInstaller" /silent /install; $Process2Monitor = "ChromeInstaller"; Do
-{
-    $ProcessesFound = Get-Process | ?{ $Process2Monitor -contains $_.Name } | Select-Object -ExpandProperty Name; If ($ProcessesFound)
-    {
-        "Still running: $( $ProcessesFound -join ', ' )" | Write-Host; Start-Sleep -Seconds 2
-    }
-    else
-    {
-        rm "$LocalTempDir\$ChromeInstaller" -ErrorAction SilentlyContinue -Verbose
-    }
-} Until (!$ProcessesFound)
+#Requires -Version 5.1
+$ErrorActionPreference = 'Continue'
 
-# Install Steam silently
-Start-Job -ScriptBlock {
-    # Download Steam installer
-    Invoke-WebRequest -Uri "https://cdn.akamai.steamstatic.com/client/installer/SteamSetup.exe" -OutFile "$env:TEMP\SteamSetup.exe"
-    Start-Process -FilePath "$env:TEMP\SteamSetup.exe" -ArgumentList '/S' -Wait
+# ============================================================
+# Chrome（同步，前台等待）
+# ============================================================
+function Install-Chrome {
+    $chromePaths = @(
+        "$env:ProgramFiles\Google\Chrome\Application\chrome.exe",
+        "${env:ProgramFiles(x86)}\Google\Chrome\Application\chrome.exe"
+    )
+    if ($chromePaths | Where-Object { Test-Path $_ }) {
+        Write-Host 'Chrome already installed, skipping.'
+        return
+    }
+    $installer = Join-Path $env:TEMP 'ChromeInstaller.exe'
+    Write-Host 'Downloading Chrome...'
+    (New-Object System.Net.WebClient).DownloadFile(
+        'https://dl.google.com/chrome/install/standalonesetup64.exe',
+        $installer
+    )
+    Start-Process -FilePath $installer -ArgumentList '/silent', '/install' -Wait
+    Remove-Item $installer -ErrorAction SilentlyContinue
 }
 
-Start-Job -ScriptBlock {
-    # https://blog.bling.moe/post/11/
-    # 设置 PowerShell 执行策略
-    [Environment]::SetEnvironmentVariable('SCOOP', 'D:\ScoopApps', 'User');
-    [Environment]::SetEnvironmentVariable('SCOOP_GLOBAL', 'D:\GlobalScoopApps', 'Machine');
+# ============================================================
+# Steam（后台 Job）
+# ============================================================
+function Install-Steam {
+    if (Test-Path "${env:ProgramFiles(x86)}\Steam\Steam.exe") {
+        Write-Host 'Steam already installed, skipping.'
+        return $null
+    }
+    Start-Job -Name 'InstallSteam' -ScriptBlock {
+        $setup = Join-Path $env:TEMP 'SteamSetup.exe'
+        Invoke-WebRequest -Uri 'https://cdn.akamai.steamstatic.com/client/installer/SteamSetup.exe' -OutFile $setup
+        Start-Process -FilePath $setup -ArgumentList '/S' -Wait
+        Remove-Item $setup -ErrorAction SilentlyContinue
+    }
+}
 
-    Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
-    iex (new-object net.webclient).downloadstring('https://get.scoop.sh')
+# ============================================================
+# Scoop bootstrap（必须同步，下面要立即用）
+# ============================================================
+function Install-Scoop {
+    if (Get-Command scoop -ErrorAction SilentlyContinue) {
+        return
+    }
+    [Environment]::SetEnvironmentVariable('SCOOP', 'D:\ScoopApps', 'User')
+    [Environment]::SetEnvironmentVariable('SCOOP_GLOBAL', 'D:\GlobalScoopApps', 'Machine')
+    $env:SCOOP = 'D:\ScoopApps'
+    $env:SCOOP_GLOBAL = 'D:\GlobalScoopApps'
+
+    Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser -Force
+    Invoke-Expression (New-Object Net.WebClient).DownloadString('https://get.scoop.sh')
     scoop install git
-    scoop bucket add extras
-    scoop bucket add nonportable
     Install-Module PSReadLine -MinimumVersion 2.0.3 -Scope CurrentUser -Force
 }
 
-# 使用Scoop安装
-scoop install alpinewsl
-scoop install blender          # 开源3D建模和动画软件
-scoop install claude-code      #
-scoop install cuda             # NVIDIA的并行计算平台和编程模型
-scoop install ddu              # Display Driver Uninstaller，用于彻底卸载显卡驱动
-scoop install nvidia-display-driver-dch-np
-scoop install ffmpeg           # 强大的多媒体处理工具，支持音视频转换和流处理
-scoop install foobar2000       # 高度可定制的音频播放器
-scoop install frp              # 开源的跨平台端口转发工具
-scoop install hxd              # 十六进制编辑器，用于查看和编辑二进制文件
-scoop install imageglass       # 轻量级图像查看器，支持多种图像格式
-scoop install jamovi           # 开源统计软件，提供用户友好的界面
-scoop install monero           # 开源的加密货币软件
-scoop install musescore        # 开源乐谱制作软件
-scoop install msys go goland go-size-analyzer pycharm goland-eap  #集成开发环境
-scoop install obs-studio       # 开源视频录制和直播软件
-scoop install office-tool-plus # Office工具集
-scoop install ollama           # 用于构建和运行机器学习模型的工具
-scoop install openssh          # SSH客户端
-scoop install qbittorrent-enhanced # 开源BitTorrent客户端，增强版
-scoop install reaper           # 数字音频工作站（DAW），用于录音、编辑和混音
-scoop install rustdesk         # 远程桌面软件，支持跨平台访问
-scoop install scrcpy            # Android屏幕录制和远程控制工具
-scoop install sqlitebrowser     # SQLite数据库的可视化管理工具
-scoop install sumatrapdf       # 轻量级PDF阅读器
-scoop install telegram         # 开源即时通讯软件
-scoop install v2rayn-desktop           # V2Ray的Windows客户端
-scoop install vlc              # 开源多媒体播放器，支持几乎所有音视频格式
-scoop install zed
+# ============================================================
+# Scoop buckets + 一次性批量安装
+# ============================================================
+function Install-ScoopPackages {
+    scoop bucket add extras
+    scoop bucket add nonportable
 
-#Start-Job -ScriptBlock {
-#    sudo Invoke-WebRequest -Uri "https://raw.githubusercontent.com/ZWolken/PingFang/main/PingFangSC-Light.otf" -OutFile "$env:windir\Fonts\PingFangSC-Light.otf"
-#    sudo Invoke-WebRequest -Uri "https://raw.githubusercontent.com/ZWolken/PingFang/main/PingFangSC-Light.otf" -OutFile "$env:windir\Fonts\PingFangSC-Medium.otf"
-#    sudo Invoke-WebRequest -Uri "https://raw.githubusercontent.com/ZWolken/PingFang/main/PingFangSC-Light.otf" -OutFile "$env:windir\Fonts\PingFangSC-Regular.otf"
-#    sudo Invoke-WebRequest -Uri "https://raw.githubusercontent.com/ZWolken/PingFang/main/PingFangSC-Light.otf" -OutFile "$env:windir\Fonts\PingFangSC-Semibold.otf"
-#    sudo Invoke-WebRequest -Uri "https://raw.githubusercontent.com/ZWolken/PingFang/main/PingFangSC-Light.otf" -OutFile "$env:windir\Fonts\PingFangSC-Thin.otf"
-#    sudo Invoke-WebRequest -Uri "https://raw.githubusercontent.com/ZWolken/PingFang/main/PingFangSC-Light.otf" -OutFile "$env:windir\Fonts\PingFangSC-Ultralight.otf"
-#}
-
-
-
-#reg add "HKLM\SOFTWARE\Microsoft\Windows Photo Viewer\Capabilities\FileAssociations" /v ".jpg" /t REG_SZ /d PhotoViewer.FileAssoc.Tiff /f
-#reg add "HKLM\SOFTWARE\Microsoft\Windows Photo Viewer\Capabilities\FileAssociations" /v ".jpeg" /t REG_SZ /d PhotoViewer.FileAssoc.Tiff /f
-#reg add "HKLM\SOFTWARE\Microsoft\Windows Photo Viewer\Capabilities\FileAssociations" /v ".bmp" /t REG_SZ /d PhotoViewer.FileAssoc.Tiff /f
-#reg add "HKLM\SOFTWARE\Microsoft\Windows Photo Viewer\Capabilities\FileAssociations" /v ".png" /t REG_SZ /d PhotoViewer.FileAssoc.Tiff /f
-
-Start-Job -ScriptBlock {
-    Set-ItemProperty -Path "HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize" -Name "ColorPrevalence" -Value 1
-    Set-ItemProperty -Path "HKCU:\Control Panel\Desktop" -Name "AutoColorization" -Value 1
-    Stop-Process -ProcessName explorer
-    Start-Process explorer
+    $packages = @(
+        'alpinewsl'                       # WSL Alpine
+        'blender'                         # 3D 建模/动画
+        'claude-code'                     # Claude Code CLI
+        'cuda'                            # NVIDIA 并行计算
+        'ddu'                             # Display Driver Uninstaller
+        'ffmpeg'                          # 多媒体处理
+        'foobar2000'                      # 音频播放器
+        'frp'                             # 端口转发
+        'go'                              # Go 编译器
+        'go-size-analyzer'                # Go 二进制分析
+        'goland'                          # Go IDE
+        'goland-eap'                      # Go IDE 预览版
+        'hxd'                             # 十六进制编辑器
+        'imageglass'                      # 图像查看器
+        'jamovi'                          # 统计软件
+        'monero'                          # 加密货币
+        'msys'                            # MSYS shell
+        'musescore'                       # 乐谱
+        'nvidia-display-driver-dch-np'    # NVIDIA 驱动
+        'obs-studio'                      # 录屏/直播
+        'office-tool-plus'                # Office 工具
+        'openssh'                         # SSH 客户端
+        'pycharm'                         # Python IDE
+        'qbittorrent-enhanced'            # BT 客户端
+        'reaper'                          # DAW
+        'rustdesk'                        # 远程桌面
+        'scrcpy'                          # Android 镜像
+        'sqlitebrowser'                   # SQLite GUI
+        'sumatrapdf'                      # PDF 阅读
+        'telegram'                        # IM
+        'v2rayn-desktop'                  # V2Ray 客户端
+        'vlc'                             # 媒体播放器
+        'zed'                             # 编辑器
+    )
+    scoop install @packages
 }
 
-Start-Job -ScriptBlock {
-    #只适用于Ryzen 电源管理
-    REG ADD "HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Power\PowerSettings\54533251-82be-4824-96c1-47b60b740d00\75b0ae3f-bce0-45a7-8c89-c9611c25e100" /v Attributes /t REG_DWORD /d 2 /f
+# ============================================================
+# 任务栏/标题栏主题色（后台）
+# ============================================================
+function Set-AccentColor {
+    Start-Job -Name 'AccentColor' -ScriptBlock {
+        Set-ItemProperty -Path 'HKCU:\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize' -Name 'ColorPrevalence' -Value 1
+        Set-ItemProperty -Path 'HKCU:\Control Panel\Desktop' -Name 'AutoColorization' -Value 1
+        Stop-Process -ProcessName explorer -Force
+        # explorer 由 WinLogon 自动重启，无需 Start-Process
+    }
 }
 
-
-Start-Job -ScriptBlock {
-    wsl.exe --install -d Debian
+# ============================================================
+# Ryzen 电源管理高级选项可见
+# ============================================================
+function Enable-RyzenPowerOption {
+    $path = 'HKLM:\SYSTEM\CurrentControlSet\Control\Power\PowerSettings\54533251-82be-4824-96c1-47b60b740d00\75b0ae3f-bce0-45a7-8c89-c9611c25e100'
+    if (Test-Path $path) {
+        Set-ItemProperty -Path $path -Name 'Attributes' -Value 2 -Type DWord
+    }
 }
 
-Start-Job -ScriptBlock {
-    powercfg /L
+# ============================================================
+# WSL Debian（后台）
+# ============================================================
+function Install-WslDebian {
+    Start-Job -Name 'WslDebian' -ScriptBlock {
+        wsl.exe --install -d Debian
+    }
+}
+
+# ============================================================
+# 电源方案重置
+# ============================================================
+function Reset-PowerSchemes {
     powercfg -restoredefaultschemes
+    powercfg /L
 }
+
+# ============================================================
+# 主流程
+# ============================================================
+Install-Chrome
+
+$jobs = New-Object System.Collections.Generic.List[object]
+$null = $jobs.Add((Install-Steam))
+
+Install-Scoop
+Install-ScoopPackages
+
+$null = $jobs.Add((Set-AccentColor))
+Enable-RyzenPowerOption
+$null = $jobs.Add((Install-WslDebian))
+Reset-PowerSchemes
+
+# 收割后台任务，输出转发到主控制台
+$active = $jobs | Where-Object { $_ }
+if ($active) {
+    Write-Host "Waiting for $($active.Count) background job(s)..."
+    $active | Wait-Job | Receive-Job
+    $active | Remove-Job
+}
+Write-Host 'init.ps1 finished.'
