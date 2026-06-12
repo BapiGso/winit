@@ -58,6 +58,88 @@ function Install-Scoop {
 }
 
 # ============================================================
+# PowerShell 7 + powershell.exe shim（Agent/IDE 友好）
+# ============================================================
+function Set-PathEntryFirst {
+    param(
+        [ValidateSet('User', 'Machine')]
+        [string]$Scope,
+        [string]$Entry
+    )
+    $path = [Environment]::GetEnvironmentVariable('Path', $Scope)
+    $entries = @()
+    if (-not [string]::IsNullOrWhiteSpace($path)) {
+        $entries = $path -split ';' | Where-Object { -not [string]::IsNullOrWhiteSpace($_) }
+    }
+    $normalized = $Entry.TrimEnd('\')
+    $entries = @($Entry) + @($entries | Where-Object { $_.TrimEnd('\') -ine $normalized })
+    [Environment]::SetEnvironmentVariable('Path', ($entries -join ';'), $Scope)
+}
+
+function Install-PowerShell7 {
+    $scoopRoot = if ($env:SCOOP) { $env:SCOOP } else { 'D:\ScoopApps' }
+    $scoopShims = Join-Path $scoopRoot 'shims'
+
+    if (-not (Get-Command pwsh -ErrorAction SilentlyContinue)) {
+        scoop install pwsh
+    }
+
+    $pwshPath = @(
+        (Join-Path $scoopRoot 'apps\pwsh\current\pwsh.exe'),
+        (Join-Path $scoopRoot 'apps\powershell\current\pwsh.exe'),
+        (Get-Command pwsh -ErrorAction SilentlyContinue).Source,
+        (Join-Path $scoopShims 'pwsh.exe')
+    ) | Where-Object { $_ -and (Test-Path $_) } | Select-Object -First 1
+
+    if (-not $pwshPath) {
+        Write-Warning 'PowerShell 7 (pwsh.exe) not found, skipping powershell.exe shim.'
+        return
+    }
+
+    $profilePath = Join-Path ([Environment]::GetFolderPath('MyDocuments')) 'PowerShell\profile.ps1'
+    $profileDir = Split-Path -Parent $profilePath
+    New-Item -ItemType Directory -Force -Path $profileDir | Out-Null
+    $profileBlock = @(
+        '# Codex-friendly UTF-8 defaults'
+        '[Console]::InputEncoding = [System.Text.UTF8Encoding]::new($false)'
+        '[Console]::OutputEncoding = [System.Text.UTF8Encoding]::new($false)'
+        '$OutputEncoding = [System.Text.UTF8Encoding]::new($false)'
+        '$PSDefaultParameterValues[''Out-File:Encoding''] = ''utf8'''
+        'if ($Host.Name -eq ''ConsoleHost'') { chcp.com 65001 > $null }'
+    ) -join [Environment]::NewLine
+    if (Test-Path $profilePath) {
+        $profileContent = Get-Content -Path $profilePath -Raw
+        if ($profileContent -notlike '*Codex-friendly UTF-8 defaults*') {
+            Add-Content -Path $profilePath -Value "`n$profileBlock`n"
+        }
+    } else {
+        Set-Content -Path $profilePath -Value $profileBlock -Encoding UTF8
+    }
+
+    $powershellShim = Join-Path $scoopShims 'powershell.shim'
+    $needsShim = $true
+    if (Test-Path $powershellShim) {
+        $needsShim = -not (Get-Content -Path $powershellShim -Raw).Contains($pwshPath)
+    }
+    if ($needsShim) {
+        if (Test-Path $powershellShim) {
+            scoop shim rm powershell
+        }
+        scoop shim add powershell $pwshPath
+    }
+
+    Set-PathEntryFirst -Scope User -Entry $scoopShims
+    try {
+        Set-PathEntryFirst -Scope Machine -Entry $scoopShims
+    } catch {
+        Write-Warning "Could not promote $scoopShims in Machine PATH: $_"
+    }
+    $env:Path = [Environment]::GetEnvironmentVariable('Path', 'Machine') + ';' + [Environment]::GetEnvironmentVariable('Path', 'User')
+
+    Write-Host "PowerShell 7 ready: $pwshPath"
+    Write-Host "powershell.exe shim: $(Join-Path $scoopShims 'powershell.exe')"
+}
+# ============================================================
 # Scoop buckets + 一次性批量安装
 # ============================================================
 function Install-ScoopPackages {
@@ -150,6 +232,7 @@ $jobs = New-Object System.Collections.Generic.List[object]
 $null = $jobs.Add((Install-Steam))
 
 Install-Scoop
+Install-PowerShell7
 Install-ScoopPackages
 
 $null = $jobs.Add((Set-AccentColor))
@@ -165,3 +248,5 @@ if ($active) {
     $active | Remove-Job
 }
 Write-Host 'init.ps1 finished.'
+
+
